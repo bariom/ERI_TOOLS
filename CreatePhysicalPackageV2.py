@@ -20,6 +20,40 @@ local_destination = sys.argv[2]
 delivery_mode = sys.argv[3]
 client_version = sys.argv[4]
 
+# Function to check if the content has only a LABEL "war" or "WAR"
+def check_xml_content(root):
+    labels = root.findall(".//LABELS/LABEL")
+    obj_elements = root.findall(".//OBJECTS/OBJ")
+    with_xml = False
+    with_war = False
+
+    # Check if there are any OBJ elements of type "XML"
+    if any(obj.get("type") == "XML" for obj in obj_elements):
+        with_xml = True
+
+    # Check if there is a LABEL "war"
+    for label in labels:
+        if label.get("name").lower() == "war":
+            with_war = True
+
+    return with_xml, with_war
+
+
+# Parse the DELIVERY_SUMMARY.xml file
+try:
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+except ET.ParseError as e:
+    print("Error parsing XML:", e)
+    sys.exit(1)
+
+# Check if the XML content meets the criteria
+with_xml, with_war = check_xml_content(root)
+if with_war and not with_xml:
+    print("The XML content does not meet the specified criteria. Exiting.")
+    sys.exit(1)
+
+
 # Function to check if 'Parametrics' label exists
 def check_for_parametrics_label(root):
     for label in root.findall(".//LABELS/LABEL[@name='Parametrics']"):
