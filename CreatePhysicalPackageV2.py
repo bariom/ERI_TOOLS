@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 import re
 import shutil
 import datetime
+#import pdb
 
 # Check if the correct number of command-line arguments are provided
 if len(sys.argv) != 5:
@@ -179,6 +180,7 @@ with open(package_log_file, "a") as packlog:
     withSpecificIssues = check_for_parametrics_refs(root)
 
     # Check if either 'withParametrics' or 'withSpecificIssues' is True
+    #pdb.set_trace()
     if withParametrics or withSpecificIssues:
         # Implement your logic for the case when either 'Parametrics' label exists
         # or there are specific issues in REF starting with 'SWITCH-ERI' or 'FDBTAB-ERI'.
@@ -192,8 +194,11 @@ with open(package_log_file, "a") as packlog:
         if os.path.exists(source_rfml_directory):
             destination_directory = local_rfml_path
             try:
+                # Remove the existing directory if it exists
+                if os.path.exists(destination_directory):
+                    shutil.rmtree(destination_directory)
                 # Create the directory structure if it doesn't exist
-                os.makedirs(destination_directory, exist_ok=True)
+                #os.makedirs(destination_directory, exist_ok=True)
 
                 # Copy the source directory and its contents to the local destination
                 shutil.copytree(source_rfml_directory, destination_directory)
@@ -257,3 +262,4 @@ with open(package_log_file, "a") as packlog:
 
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     packlog.write(f"Finished packaging at {current_datetime}\n")
+
