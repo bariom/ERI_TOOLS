@@ -17,7 +17,7 @@ def rev_search(directory_path):
 
     for root, dirs, files in os.walk(".", topdown=True):
         # Exclude files with ".war" extension
-        files = [file for file in files if not file.endswith(".war")]
+        files = [file for file in files if not (file.endswith(".war") or file.endswith(".jasper") or file.endswith(".jrxml") or file.endswith(".png"))]
 
         for file in files:
             file_path = os.path.join(root, file)
@@ -27,7 +27,7 @@ def rev_search(directory_path):
                 for match in matches:
                     directory = os.path.dirname(file_path).split("repositories\\")[1].split("\\", 1)[0]
                     filename = os.path.basename(file_path)
-                    outputList += f"{filename}\t\t{match}\n"
+                    outputList += f"{filename}\t{directory}\t{match}\n"
                     print(f"{filename}\t{directory}\t{match}\n")
 
                 pyperclip.copy(outputList)
