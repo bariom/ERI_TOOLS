@@ -87,6 +87,7 @@ def search_and_copy_missing_file(missing_file, source_directory, destination_dir
                     shutil.copy(source_file_path, destination_file_path)
                     #with open(package_log_file, "a") as packlog_file:
                     packlog.write(f"Found {missing_file} in {source_file_path} and copied to {destination_file_path}\n")
+                    packlog.flush()
 
                     print("Copied missing file:", source_file_path, "to", destination_file_path)
                     return  # Found and copied the missing file, no need to continue searching
@@ -95,7 +96,8 @@ def search_and_copy_missing_file(missing_file, source_directory, destination_dir
                     print("Error copying missing file:", str(e))
 
 # Define the base remote path
-base_remote_path = f"/minio/ERI/sources/svn/"
+# For BARIOM: base_remote_path = f"/minio/ERI/sources/svn/"
+base_remote_path = f"/mnt/minio/ERI/sources/svn/"
 
 # Define a list of file names to copy
 files_to_copy = [
@@ -117,6 +119,7 @@ package_log_file = os.path.join(local_destination, f"./logs/package{current_date
 # Open the package_log_file file in append mode
 with open(package_log_file, "a") as packlog:
     packlog.write(f"Start packaging at {current_datetime}\n")
+    packlog.flush()
 
     # Parse the DELIVERY_SUMMARY.xml file
     try:
@@ -162,6 +165,7 @@ with open(package_log_file, "a") as packlog:
                 # Handle the case where the file is not found
                 packlog.write(f"File not found: {target_path}\n")
                 packlog.write(f"Searching for it in all repositories.\n")
+                packlog.flush()
                 print("File not found:", target_path)
 
                 missing_file = obj.get("name")
