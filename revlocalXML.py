@@ -27,8 +27,8 @@ def rev_search(directory_path):
                 for match in matches:
                     directory = os.path.dirname(file_path).split("repositories\\")[1].split("\\", 1)[0]
                     filename = os.path.basename(file_path)
-                    outputList += f"{filename}\t{directory}\t{match}\n"
-                    print(f"{filename}\t{directory}\t{match}\n")
+                    outputList += f"{filename}\t\t{match}\t\t{directory}\n"
+                    print(f"{filename}\t{match}\t{directory}\n")
 
                 pyperclip.copy(outputList)
 

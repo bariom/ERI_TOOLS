@@ -1,3 +1,4 @@
+# Serve il PDF che arriva con l'email di delivery (non quello contenuto nello zip)
 import pdfplumber
 import re
 import pyperclip
