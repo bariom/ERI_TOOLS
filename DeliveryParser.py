@@ -36,12 +36,23 @@ def process_pdf():
                 tables = page.extract_tables()
                 for table in tables:
                     for row in table[1:]:
-                        if len(row) >= 5:
+                        if len(row) == 7:
+                            object_data = row[1].replace('\n', '') if row[1] else ''
+                            type_data = row[2].replace('\n', '') if row[2] else ''
+                            if type_data == '*FILE':
+                                type_data = row[3].replace('\n', '') if row[3] else ''
+                            src_date = row[5].replace('\n', '') if row[5] else ''
+                        elif len(row) == 5:
                             object_data = row[0].replace('\n', '') if row[0] else ''
                             type_data = row[1].replace('\n', '') if row[1] else ''
+                            if type_data == '*FILE':
+                                type_data = row[2].replace('\n', '') if row[2] else ''
                             src_date = row[4].replace('\n', '') if row[4] else ''
-                            if object_data:
-                                output_str += f"{JiraNum}\t{ref_word}\t{object_data}\t{type_data}\t{src_date}\t\t\t{livDate}\n"
+                        else:
+                            continue
+
+                        if object_data:
+                            output_str += f"{JiraNum}\t{ref_word}\t{object_data}\t{type_data}\t{src_date}\t\t\t{livDate}\n"
 
     pyperclip.copy(output_str)
     display_result(output_str)
